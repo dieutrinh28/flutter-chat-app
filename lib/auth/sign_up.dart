@@ -1,3 +1,5 @@
+import 'package:chat_app/auth/login.dart';
+import 'package:chat_app/firebase/auth.dart';
 import 'package:flutter/material.dart';
 
 import '../res/asset.dart';
@@ -15,9 +17,12 @@ class SignUpPage extends StatefulWidget {
 
 class SignUpPageState extends State<SignUpPage> {
   final formKey = GlobalKey<FormState>();
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final verifyPasswordController = TextEditingController();
+
+  final EmailAndPasswordAuth emailAndPasswordAuth = EmailAndPasswordAuth();
 
   @override
   void dispose() {
@@ -31,16 +36,46 @@ class SignUpPageState extends State<SignUpPage> {
   void onFacebookClick() {}
   void onAppleClick() {}
 
-  void onProceedClick() {
-    final isValid = formKey.currentState?.validate();
-    if (isValid != null && isValid == true) {
+  void onProceedClick() async {
+    final isFormValid = formKey.currentState?.validate();
+    if (isFormValid != null && isFormValid == true) {
       formKey.currentState?.save();
 
+      final EmailSignUpResults response = await emailAndPasswordAuth.signUpAuth(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      if (response == EmailSignUpResults.SignUpCompleted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const LoginPage(),
+          ),
+        );
+      } else {
+        showErrorSnackBar(response);
+      }
     }
   }
 
-  void onForgotPasswordClick() {
+  void showErrorSnackBar(EmailSignUpResults response) {
+    String msg = "";
+    if (response == EmailSignUpResults.EmailAlreadyPresent) {
+      msg = 'Email Already Present';
+    } else {
+      msg = 'Sign Up Not Completed';
+    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
 
+  void onLoginClick() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const LoginPage(),
+      ),
+    );
   }
 
   @override
@@ -202,9 +237,9 @@ class SignUpPageState extends State<SignUpPage> {
                     style: PrimaryFont.textSmall,
                   ),
                   TextButton(
-                    onPressed: onForgotPasswordClick,
+                    onPressed: onLoginClick,
                     child: Text(
-                      "Reset password",
+                      "Login",
                       textAlign: TextAlign.center,
                       style: PrimaryFont.subtitleSmallBold.copyWith(
                         color: Cl.brandPrimaryBase,

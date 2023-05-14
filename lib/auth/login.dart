@@ -1,3 +1,5 @@
+import 'package:chat_app/firebase/auth.dart';
+import 'package:chat_app/screen/chat_list.dart';
 import 'package:flutter/material.dart';
 
 import '../res/asset.dart';
@@ -6,8 +8,6 @@ import '../res/style.dart';
 import '../widget/custom_button.dart';
 import '../widget/custom_input_field.dart';
 import 'sign_up.dart';
-
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,8 +18,10 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final EmailAndPasswordAuth emailAndPasswordAuth = EmailAndPasswordAuth();
 
   bool isHiddenPassword = true;
 
@@ -39,11 +41,41 @@ class LoginPageState extends State<LoginPage> {
   void onGoogleClick() {}
   void onFacebookClick() {}
   void onAppleClick() {}
-  void onLoginClick() {
+
+  void onLoginClick() async {
     final isValid = formKey.currentState?.validate();
     if (isValid != null && isValid == true) {
       formKey.currentState?.save();
+
+      final EmailSignInResults response =
+          await emailAndPasswordAuth.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      if (response == EmailSignInResults.SignInCompleted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const ChatList(),
+          ),
+        );
+      } else {
+        showErrorSnackBar(response);
+      }
     }
+  }
+
+  void showErrorSnackBar(EmailSignInResults response) {
+    String msg = "";
+    if (response == EmailSignInResults.EmailNotVerified) {
+      msg = 'Email not Verified.\nPlease Verify your email and then Log In';
+    } else if (response == EmailSignInResults.EmailOrPasswordInvalid) {
+      msg = 'Email And Password Invalid';
+    } else {
+      msg = 'Sign In Not Completed';
+    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
   void onSignUpClick() {
@@ -53,9 +85,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  void onForgotPasswordClick() {
-
-  }
+  void onForgotPasswordClick() {}
 
   @override
   Widget build(BuildContext context) {
