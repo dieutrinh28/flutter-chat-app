@@ -22,6 +22,7 @@ class LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final EmailAndPasswordAuth emailAndPasswordAuth = EmailAndPasswordAuth();
+  final GoogleAuthentication googleAuthentication = GoogleAuthentication();
 
   bool isHiddenPassword = true;
 
@@ -38,7 +39,30 @@ class LoginPageState extends State<LoginPage> {
     });
   }
 
-  void onGoogleClick() {}
+  void onGoogleClick() async {
+    final GoogleSignInResults response = await googleAuthentication.signInWithGoogle();
+
+    String msg = "";
+
+    if (response == GoogleSignInResults.SignInCompleted) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => ChatList()),
+              (route) => false);
+    } else if (response == GoogleSignInResults.SignInNotCompleted) {
+      msg = 'Sign In Not Completed';
+    } else if (response == GoogleSignInResults.AlreadySignedIn) {
+      msg = 'Already Signed In';
+    } else {
+      msg = 'Unexpected Error';
+    }
+
+    if (msg != '') {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(msg)));
+    }
+  }
+
   void onFacebookClick() {}
   void onAppleClick() {}
 
@@ -53,29 +77,26 @@ class LoginPageState extends State<LoginPage> {
         password: passwordController.text,
       );
 
+      String msg = "";
+
       if (response == EmailSignInResults.SignInCompleted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const ChatList(),
-          ),
-        );
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => ChatList()),
+            (route) => false);
+      } else if (response == EmailSignInResults.EmailNotVerified) {
+        msg = 'Email not Verified.\nPlease Verify your email and then Log In';
+      } else if (response == EmailSignInResults.EmailOrPasswordInvalid) {
+        msg = 'Email And Password Invalid';
       } else {
-        showErrorSnackBar(response);
+        msg = 'Sign In Not Completed';
+      }
+
+      if (msg != '') {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(msg)));
       }
     }
-  }
-
-  void showErrorSnackBar(EmailSignInResults response) {
-    String msg = "";
-    if (response == EmailSignInResults.EmailNotVerified) {
-      msg = 'Email not Verified.\nPlease Verify your email and then Log In';
-    } else if (response == EmailSignInResults.EmailOrPasswordInvalid) {
-      msg = 'Email And Password Invalid';
-    } else {
-      msg = 'Sign In Not Completed';
-    }
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
   void onSignUpClick() {

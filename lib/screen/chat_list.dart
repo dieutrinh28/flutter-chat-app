@@ -1,26 +1,41 @@
+import 'package:chat_app/auth/login.dart';
 import 'package:chat_app/firebase/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class ChatList extends StatelessWidget {
+class ChatList extends StatefulWidget {
   const ChatList({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final EmailAndPasswordAuth emailAndPasswordAuth = EmailAndPasswordAuth();
-    void onLogOutClick() {
-      emailAndPasswordAuth.logOut();
-      Navigator.pop(context);
+  State<ChatList> createState() => _ChatListState();
+}
+
+class _ChatListState extends State<ChatList> {
+  final EmailAndPasswordAuth emailAndPasswordAuth = EmailAndPasswordAuth();
+  final GoogleAuthentication googleAuthentication = GoogleAuthentication();
+
+  void onLogOutClick() async {
+    final bool googleResponse = await googleAuthentication.logOut();
+
+    if (!googleResponse) {
+      await emailAndPasswordAuth.logOut();
     }
+
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (_) => LoginPage()), (route) => false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Chat List"),
       ),
       body: SingleChildScrollView(
-        child: TextButton(
-          child: Text('Log Out'),
-          onPressed: onLogOutClick,
-        )
-      ),
+          child: TextButton(
+        onPressed: onLogOutClick,
+        child: const Text('Log Out'),
+      )),
     );
   }
 }
