@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../res/asset.dart';
 import '../res/color.dart';
 import '../res/style.dart';
+import '../screen/new_user_entry.dart';
 import '../widget/custom_button.dart';
 import '../widget/custom_input_field.dart';
 
@@ -50,7 +51,7 @@ class SignUpPageState extends State<SignUpPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => const LoginPage(),
+            builder: (_) => const TakePrimaryUserData(),
           ),
         );
       } else {

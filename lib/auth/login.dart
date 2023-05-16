@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../res/asset.dart';
 import '../res/color.dart';
 import '../res/style.dart';
+import '../screen/new_user_entry.dart';
 import '../widget/custom_button.dart';
 import '../widget/custom_input_field.dart';
 import 'sign_up.dart';
@@ -21,6 +22,7 @@ class LoginPageState extends State<LoginPage> {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
   final EmailAndPasswordAuth emailAndPasswordAuth = EmailAndPasswordAuth();
   final GoogleAuthentication googleAuthentication = GoogleAuthentication();
 
@@ -82,7 +84,7 @@ class LoginPageState extends State<LoginPage> {
       if (response == EmailSignInResults.SignInCompleted) {
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (_) => ChatList()),
+            MaterialPageRoute(builder: (_) => TakePrimaryUserData()),
             (route) => false);
       } else if (response == EmailSignInResults.EmailNotVerified) {
         msg = 'Email not Verified.\nPlease Verify your email and then Log In';
@@ -162,10 +164,6 @@ class LoginPageState extends State<LoginPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "this field is required!";
-                      } else if (!RegExp(
-                              r"^[a-zA-Z\d.]+@[a-zA-Z\d]+\.[a-zA-Z]+")
-                          .hasMatch(value)) {
-                        return "email invalid!";
                       }
                       return null;
                     },
@@ -181,9 +179,6 @@ class LoginPageState extends State<LoginPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "this field is required!";
-                      }
-                      if (value.length < 6) {
-                        return "password must from 6 chars!";
                       }
                       return null;
                     },
