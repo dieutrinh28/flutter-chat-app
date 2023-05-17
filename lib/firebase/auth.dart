@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 enum EmailSignUpResults {
@@ -85,27 +84,29 @@ class GoogleAuthentication {
   Future<GoogleSignInResults> signInWithGoogle() async {
     try {
       if (await googleSignIn.isSignedIn()) {
+        print('Google Sign In Already');
         return GoogleSignInResults.AlreadySignedIn;
       } else {
-        final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-        if (googleUser == null) {
-          print('Google Sign In not completed');
+        final GoogleSignInAccount? googleSignInAccount =
+            await googleSignIn.signIn();
+        if (googleSignInAccount == null) {
+          print('Google Sign In Not Completed');
           return GoogleSignInResults.SignInNotCompleted;
         } else {
-          final GoogleSignInAuthentication googleAuth =
-              await googleUser.authentication;
-          final credential = GoogleAuthProvider.credential(
-            accessToken: googleAuth.accessToken,
-            idToken: googleAuth.idToken,
+          final GoogleSignInAuthentication googleSignInAuth =
+              await googleSignInAccount.authentication;
+          final OAuthCredential credential = GoogleAuthProvider.credential(
+            accessToken: googleSignInAuth.accessToken,
+            idToken: googleSignInAuth.idToken,
           );
           final UserCredential userCredential =
               await FirebaseAuth.instance.signInWithCredential(credential);
 
           if (userCredential.user!.email != null) {
-            print('Google Sign In completed');
+            print('Google Sign In Completed');
             return GoogleSignInResults.SignInCompleted;
           } else {
-            print('Google Sign In problem');
+            print('Google Sign In Problem');
             return GoogleSignInResults.UnexpectedError;
           }
         }
@@ -124,8 +125,7 @@ class GoogleAuthentication {
       await googleSignIn.signOut();
       await FirebaseAuth.instance.signOut();
       return true;
-    }
-    catch (e) {
+    } catch (e) {
       print('Error in Sign In with Google');
       return false;
     }

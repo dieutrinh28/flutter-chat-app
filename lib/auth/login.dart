@@ -42,15 +42,13 @@ class LoginPageState extends State<LoginPage> {
   }
 
   void onGoogleClick() async {
-    final GoogleSignInResults response = await googleAuthentication.signInWithGoogle();
+    final GoogleSignInResults response =
+        await googleAuthentication.signInWithGoogle();
 
     String msg = "";
 
     if (response == GoogleSignInResults.SignInCompleted) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => ChatList()),
-              (route) => false);
+      msg = 'Sign In Completed';
     } else if (response == GoogleSignInResults.SignInNotCompleted) {
       msg = 'Sign In Not Completed';
     } else if (response == GoogleSignInResults.AlreadySignedIn) {
@@ -59,9 +57,11 @@ class LoginPageState extends State<LoginPage> {
       msg = 'Unexpected Error';
     }
 
-    if (msg != '') {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(msg)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+
+    if (response == GoogleSignInResults.SignInCompleted) {
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => ChatList()), (route) => false);
     }
   }
 
