@@ -1,7 +1,9 @@
 import 'package:chat_app/firebase/auth.dart';
 import 'package:chat_app/screen/chat_list.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../firebase/firestore.dart';
 import '../res/asset.dart';
 import '../res/color.dart';
 import '../res/style.dart';
@@ -45,6 +47,12 @@ class LoginPageState extends State<LoginPage> {
     final GoogleSignInResults response =
         await googleAuthentication.signInWithGoogle();
 
+    final CloudStoreDataManagement cloudStoreDataManagement =
+        CloudStoreDataManagement();
+    final bool dataPresentResponse =
+        await cloudStoreDataManagement.userRecordPresentOrNot(
+            userEmail: FirebaseAuth.instance.currentUser!.email.toString());
+
     String msg = "";
 
     if (response == GoogleSignInResults.SignInCompleted) {
@@ -60,8 +68,13 @@ class LoginPageState extends State<LoginPage> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
     if (response == GoogleSignInResults.SignInCompleted) {
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => ChatList()), (route) => false);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                dataPresentResponse ? ChatList() : TakePrimaryUserData(),
+          ),
+          (route) => false);
     }
   }
 
@@ -79,12 +92,20 @@ class LoginPageState extends State<LoginPage> {
         password: passwordController.text,
       );
 
-      String msg = "";
+      final CloudStoreDataManagement cloudStoreDataManagement =
+          CloudStoreDataManagement();
+      final bool dataPresentResponse =
+          await cloudStoreDataManagement.userRecordPresentOrNot(
+              userEmail: FirebaseAuth.instance.currentUser!.email.toString());
 
+      String msg = "";
       if (response == EmailSignInResults.SignInCompleted) {
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (_) => TakePrimaryUserData()),
+            MaterialPageRoute(
+              builder: (_) =>
+                  dataPresentResponse ? ChatList() : TakePrimaryUserData(),
+            ),
             (route) => false);
       } else if (response == EmailSignInResults.EmailNotVerified) {
         msg = 'Email not Verified.\nPlease Verify your email and then Log In';

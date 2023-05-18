@@ -55,7 +55,8 @@ class EmailAndPasswordAuth {
       );
       if (userCredential.user!.emailVerified) {
         return EmailSignInResults.SignInCompleted;
-      } else {
+      }
+      else {
         final bool logOutResponse = await logOut();
         if (logOutResponse) {
           return EmailSignInResults.EmailNotVerified;

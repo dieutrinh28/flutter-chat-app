@@ -1,4 +1,7 @@
+import 'package:chat_app/firebase/firestore.dart';
+import 'package:chat_app/screen/chat_list.dart';
 import 'package:chat_app/widget/custom_input_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../res/style.dart';
@@ -17,6 +20,9 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
   final userNameController = TextEditingController();
   final userAboutController = TextEditingController();
 
+  final CloudStoreDataManagement cloudStoreDataManagement =
+      CloudStoreDataManagement();
+
   @override
   void dispose() {
     userNameController.dispose();
@@ -28,9 +34,32 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
     final isValid = formKey.currentState?.validate();
     if (isValid != null && isValid == true) {
       formKey.currentState?.save();
+
+      final bool userNamePresentResponse = await cloudStoreDataManagement
+          .checkThisUserAlreadyPresentOrNot(userName: userNameController.text);
+      String msg = "";
+      if (userNamePresentResponse) {
+        msg = 'Username Already Present';
+      } else {
+        final bool userEntryResponse =
+            await cloudStoreDataManagement.registerNewUser(
+          userName: userNameController.text,
+          userAbout: userAboutController.text,
+          userEmail: FirebaseAuth.instance.currentUser!.email.toString(),
+        );
+
+        if (userEntryResponse) {
+          msg = 'User data Entry Successfully';
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const ChatList()),
+              (route) => false);
+        } else {
+          msg = 'User data Not Entry Successfully';
+        }
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
-
-
   }
 
   @override
