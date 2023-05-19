@@ -1,11 +1,11 @@
-import 'package:chat_app/firebase/firestore.dart';
-import 'package:chat_app/screen/chat_list.dart';
-import 'package:chat_app/widget/custom_input_field.dart';
+import 'package:chat_app/Backend/firebase/firestore.dart';
+import 'package:chat_app/FrontEnd/screen/chat_screen.dart';
+import 'package:chat_app/Global/widget/custom_input_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../res/style.dart';
-import '../widget/custom_button.dart';
+import '../../Global/res/style.dart';
+import '../../Global/widget/custom_button.dart';
 
 class TakePrimaryUserData extends StatefulWidget {
   const TakePrimaryUserData({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
       formKey.currentState?.save();
 
       final bool userNamePresentResponse = await cloudStoreDataManagement
-          .checkThisUserAlreadyPresentOrNot(userName: userNameController.text);
+          .checkUserNameAlreadyPresentOrNot(userName: userNameController.text);
       String msg = "";
       if (userNamePresentResponse) {
         msg = 'Username Already Present';
@@ -52,7 +52,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
           msg = 'User data Entry Successfully';
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (_) => const ChatList()),
+              MaterialPageRoute(builder: (_) => const ChatScreen()),
               (route) => false);
         } else {
           msg = 'User data Not Entry Successfully';
@@ -66,6 +66,10 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 0,
+        ),
         child: Form(
           key: formKey,
           child: ListView(

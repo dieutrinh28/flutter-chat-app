@@ -1,13 +1,13 @@
-import 'package:chat_app/auth/login.dart';
-import 'package:chat_app/firebase/auth.dart';
+import 'package:chat_app/FrontEnd/auth/login.dart';
+import 'package:chat_app/Backend/firebase/auth.dart';
 import 'package:flutter/material.dart';
 
-import '../res/asset.dart';
-import '../res/color.dart';
-import '../res/style.dart';
+import '../../Global/res/asset.dart';
+import '../../Global/res/color.dart';
+import '../../Global/res/style.dart';
 import '../screen/new_user_entry.dart';
-import '../widget/custom_button.dart';
-import '../widget/custom_input_field.dart';
+import '../../Global/widget/custom_button.dart';
+import '../../Global/widget/custom_input_field.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});

@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 class CloudStoreDataManagement {
   final collectionName = 'generation_users';
 
-  Future<bool> checkThisUserAlreadyPresentOrNot({
+  Future<bool> checkUserNameAlreadyPresentOrNot({
     required String userName,
   }) async {
     try {

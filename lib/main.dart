@@ -1,12 +1,11 @@
-import 'package:chat_app/auth/login.dart';
-import 'package:chat_app/firebase/firestore.dart';
-import 'package:chat_app/screen/chat_list.dart';
-import 'package:chat_app/screen/new_user_entry.dart';
+import 'package:chat_app/Backend/firebase/firestore.dart';
+import 'package:chat_app/FrontEnd/screen/main_screen.dart';
+import 'package:chat_app/FrontEnd/screen/new_user_entry.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'auth/sign_up.dart';
+import 'FrontEnd/auth/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +24,7 @@ void main() async {
 
 Future<Widget> differentContextDecisionTake() async {
   if (FirebaseAuth.instance.currentUser == null) {
-    return LoginPage();
+    return const LoginPage();
   }
   else {
     final CloudStoreDataManagement cloudStoreDataManagement =
@@ -33,6 +32,6 @@ Future<Widget> differentContextDecisionTake() async {
     final bool dataPresentResponse =
         await cloudStoreDataManagement.userRecordPresentOrNot(
             userEmail: FirebaseAuth.instance.currentUser!.email.toString());
-    return dataPresentResponse ? ChatList() : TakePrimaryUserData();
+    return dataPresentResponse ? const MainScreen() : const TakePrimaryUserData();
   }
 }

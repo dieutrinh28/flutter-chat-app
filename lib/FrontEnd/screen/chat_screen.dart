@@ -1,16 +1,16 @@
-import 'package:chat_app/auth/login.dart';
-import 'package:chat_app/firebase/auth.dart';
+import 'package:chat_app/FrontEnd/auth/login.dart';
+import 'package:chat_app/Backend/firebase/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class ChatList extends StatefulWidget {
-  const ChatList({Key? key}) : super(key: key);
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({Key? key}) : super(key: key);
 
   @override
-  State<ChatList> createState() => _ChatListState();
+  State<ChatScreen> createState() => ChatScreenState();
 }
 
-class _ChatListState extends State<ChatList> {
+class ChatScreenState extends State<ChatScreen> {
   final EmailAndPasswordAuth emailAndPasswordAuth = EmailAndPasswordAuth();
   final GoogleAuthentication googleAuthentication = GoogleAuthentication();
 
