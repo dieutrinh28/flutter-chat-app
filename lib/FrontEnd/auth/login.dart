@@ -1,5 +1,5 @@
 import 'package:chat_app/Backend/firebase/auth.dart';
-import 'package:chat_app/FrontEnd/screen/main_screen.dart';
+import 'package:chat_app/Global/widget/custom_bottom_nav.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -7,9 +7,9 @@ import '../../Backend/firebase/firestore.dart';
 import '../../Global/res/asset.dart';
 import '../../Global/res/color.dart';
 import '../../Global/res/style.dart';
-import '../screen/new_user_entry.dart';
 import '../../Global/widget/custom_button.dart';
 import '../../Global/widget/custom_input_field.dart';
+import '../screen/new_user_entry.dart';
 import 'sign_up.dart';
 
 class LoginPage extends StatefulWidget {
@@ -72,7 +72,7 @@ class LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(
             builder: (_) =>
-                dataPresentResponse ? MainScreen() : TakePrimaryUserData(),
+                dataPresentResponse ? BottomNav() : TakePrimaryUserData(),
           ),
           (route) => false);
     }
@@ -104,7 +104,7 @@ class LoginPageState extends State<LoginPage> {
             context,
             MaterialPageRoute(
               builder: (_) =>
-                  dataPresentResponse ? MainScreen() : TakePrimaryUserData(),
+                  dataPresentResponse ? BottomNav() : TakePrimaryUserData(),
             ),
             (route) => false);
       } else if (response == EmailSignInResults.EmailNotVerified) {

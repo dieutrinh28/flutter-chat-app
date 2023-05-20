@@ -1,6 +1,6 @@
 import 'package:chat_app/Backend/firebase/firestore.dart';
-import 'package:chat_app/FrontEnd/screen/main_screen.dart';
 import 'package:chat_app/FrontEnd/screen/new_user_entry.dart';
+import 'package:chat_app/Global/widget/custom_bottom_nav.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +32,8 @@ Future<Widget> differentContextDecisionTake() async {
     final bool dataPresentResponse =
         await cloudStoreDataManagement.userRecordPresentOrNot(
             userEmail: FirebaseAuth.instance.currentUser!.email.toString());
-    return dataPresentResponse ? const MainScreen() : const TakePrimaryUserData();
+    return dataPresentResponse
+        ? const BottomNav()
+        : const TakePrimaryUserData();
   }
 }

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-import 'call_screen.dart';
-import 'chat_screen.dart';
-import 'people_screen.dart';
-import 'story_screen.dart';
+import '../../FrontEnd/screen/call_screen.dart';
+import '../../FrontEnd/screen/chat_screen.dart';
+import '../../FrontEnd/screen/people_screen.dart';
+import '../../FrontEnd/screen/story_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+class BottomNav extends StatefulWidget {
+  const BottomNav({Key? key}) : super(key: key);
 
   @override
-  State<MainScreen> createState() => MainScreenState();
+  State<BottomNav> createState() => BottomNavState();
 }
 
-class MainScreenState extends State<MainScreen> {
+class BottomNavState extends State<BottomNav> {
   int selectedIndex = 0;
   List<BottomNavigationBarItem> bottomNavBarItems = const [
     BottomNavigationBarItem(
