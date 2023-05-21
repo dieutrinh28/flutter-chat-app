@@ -43,6 +43,10 @@ class CloudStoreDataManagement {
         "token": getToken,
         "phone_number": "",
         "profile_pic": "",
+        "activity": [],
+        "connections": {},
+        "connection_request": [],
+        "total_connections": "",
       });
 
       return true;

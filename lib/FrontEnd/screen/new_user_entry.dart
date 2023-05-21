@@ -1,5 +1,6 @@
 import 'package:chat_app/Backend/firebase/firestore.dart';
 import 'package:chat_app/FrontEnd/screen/chat_screen.dart';
+import 'package:chat_app/Global/widget/custom_bottom_nav.dart';
 import 'package:chat_app/Global/widget/custom_input_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class _TakePrimaryUserDataState extends State<TakePrimaryUserData> {
           msg = 'User data Entry Successfully';
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (_) => const ChatScreen()),
+              MaterialPageRoute(builder: (_) => const BottomNav()),
               (route) => false);
         } else {
           msg = 'User data Not Entry Successfully';
