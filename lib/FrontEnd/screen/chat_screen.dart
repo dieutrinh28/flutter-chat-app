@@ -1,8 +1,8 @@
+import 'package:chat_app/FrontEnd/screen/conversation_screen.dart';
 import 'package:chat_app/Global/res/asset.dart';
 import 'package:chat_app/Global/widget/custom_navbar.dart';
 import 'package:flutter/material.dart';
 
-import '../../Global/res/style.dart';
 import '../../Global/widget/custom_appbar.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -13,33 +13,68 @@ class ChatScreen extends StatefulWidget {
 }
 
 class ChatScreenState extends State<ChatScreen> {
+
+  final TextEditingController searchByUsernameController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchByUsernameController.dispose();
+    super.dispose();
+  }
   final List<String> allUserConnectionActivity = ['Naibee', 'Dieu Trinh'];
   final List<String> allConnectionsUserName = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'Chats',
         icon: Icons.edit_note,
       ),
-      drawer: NavBar(),
+      drawer: const NavBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            connectionList(context),
+            searchBar(),
+            connectionList(),
           ],
         ),
       ),
     );
   }
 
-  Widget connectionList(BuildContext context) {
+  Widget searchBar() {
     return Container(
-      margin: const EdgeInsets.only(
-        top: 20,
-        left: 20,
+      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.grey,
+          width: 1,
+          style: BorderStyle.solid,
+        ),
+        borderRadius: BorderRadius.circular(24),
       ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: searchByUsernameController,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: "Search by username",
+              ),
+            ),
+          ),
+          const Icon(Icons.search)
+        ],
+      ),
+    );
+  }
+
+  Widget connectionList() {
+    return Container(
+      margin: const EdgeInsets.only(left: 20),
       child: ListView.builder(
         shrinkWrap: true,
         itemCount: allUserConnectionActivity.length,
@@ -47,21 +82,24 @@ class ChatScreenState extends State<ChatScreen> {
           return Column(
             children: [
               ListTile(
-                /*iconColor: Colors.blue,
-                tileColor: Colors.blue.withOpacity(0.1),*/
                 leading: Image.asset(Id.facebook),
                 title: Text(allUserConnectionActivity[index].toString()),
                 subtitle: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: const [
                     Text('Message'),
                     Text('Time'),
                   ],
                 ),
                 onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ConversationScreen(),
+                    ),
+                  );
                 },
               ),
-
               const SizedBox(height: 8),
             ],
           );

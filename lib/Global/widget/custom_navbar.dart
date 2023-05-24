@@ -1,5 +1,7 @@
 import 'package:chat_app/FrontEnd/screen/chat_screen.dart';
 import 'package:chat_app/Global/widget/custom_bottom_nav.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../Backend/firebase/auth.dart';

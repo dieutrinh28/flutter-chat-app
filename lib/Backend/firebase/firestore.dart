@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intl/intl.dart';
 
@@ -69,5 +70,23 @@ class CloudStoreDataManagement {
     }
   }
 
+  /*Future<List<Map<String, dynamic>>> getUsersExceptMe({
+    required String currentUserEmail
+}) async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance.collection(collectionName).get();
 
+      List<Map<String, dynamic>> userDataCollection = [];
+
+      querySnapshot.docs.forEach((QueryDocumentSnapshot<Map<String, dynamic>> queryDocumentSnapshot) {
+        if (currentUserEmail != queryDocumentSnapshot.id) {
+         userDataCollection.add({queryDocumentSnapshot.id: });
+        }
+      });
+
+    } catch (e) {
+      print('Error in get all user list except my account: ${e.toString()}');
+      return [];
+    }
+  }*/
 }
